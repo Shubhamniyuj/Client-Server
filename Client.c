@@ -12,70 +12,68 @@
 #define ADDR "127.0.0.1"
 
 
-int main(){
+int main()
+{
 
-char dir[SIZE];
-int sockfd=socket(AF_INET,SOCK_STREAM,0);
-if(sockfd == -1)
+  char dir[SIZE];
+  int sockfd=socket(AF_INET,SOCK_STREAM,0);
+  if(sockfd == -1)
     {
-        printf("Socket Creation Failed\n");
-        return 1;
+     printf("Socket Creation Failed\n");
+     return 1;
     }
-    printf("Socket is created sucessfully\n");
+   printf("Socket is created sucessfully\n");
 
-char client_mess[SIZE];
-struct sockaddr_in server_addr;
-server_addr.sin_family= AF_INET;
-server_addr.sin_port= htons(PORT);
-server_addr.sin_addr.s_addr= inet_addr(ADDR);
+  char client_mess[SIZE];
+  struct sockaddr_in server_addr;
+  server_addr.sin_family= AF_INET;
+  server_addr.sin_port= htons(PORT);
+  server_addr.sin_addr.s_addr= inet_addr(ADDR);
 
-if(connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr))<0)
+  if(connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr))<0)
     {
-        perror("Failed to connect.\n");
-        return 1;
+     perror("Failed to connect.\n");
+     return 1;
     }
-printf("Sucessfully conected with server\n");
+   printf("Sucessfully conected with server\n");
 
 
-char serv_resp[MAXSIZE];
+  char serv_resp[MAXSIZE];
 
-while(1){
+  while(1){
 
-printf("Enter the command: ");
-    gets(client_mess);
+  printf("Enter the command: ");
+  gets(client_mess);
 
-send(sockfd,client_mess,sizeof(client_mess),0);
-
-
-if(strcmp("bye",client_mess)==0){
-printf("Bye!!\n");
-close(sockfd);
-exit(0);
-}
+  send(sockfd,client_mess,sizeof(client_mess),0);
 
 
-if(strcmp("cd",client_mess)==0){
+  if(strcmp("bye",client_mess)==0){
+  printf("Bye!!\n");
+  close(sockfd);
+  exit(0);
+  }
+
+
+  if(strcmp("cd",client_mess)==0){
   printf("Enter directory name :");
   gets(dir);
   send(sockfd,dir,sizeof(dir),0);
+  }       
 
-}       
+  memset(dir, '\0', sizeof dir);
 
-memset(dir, '\0', sizeof dir);
+  if(recv(sockfd,&serv_resp,sizeof(serv_resp),0)<0){
+  printf("Receive failed\n");
+  exit(0); 
+  }
 
-if(recv(sockfd,&serv_resp,sizeof(serv_resp),0)<0)
-{
-   printf("Receive failed\n");
-   exit(0); 
+  printf("Message from server: %s\n",serv_resp);
 
-}
+  memset(serv_resp, '\0', sizeof serv_resp);
 
-printf("Message from server: %s\n",serv_resp);
-
-memset(serv_resp, '\0', sizeof serv_resp);
-
-}
+  }
 close(sockfd);
-
 return(0);
+
 }

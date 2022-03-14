@@ -1,19 +1,5 @@
 #include "client-server.h"
 
-/*#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<netinet/in.h>
-#include<unistd.h>
-#include<sys/socket.h>
-#include<string.h>
-#include<arpa/inet.h>
-#define PORT 54321
-#define SIZE 256
-#define MAXSIZE 2000
-#define ADDR "127.0.0.1"
-*/
-
 int main()
 {
 
